@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Control de Entrada - Oficina</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f3f4f6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #005bb5;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    main {
+      max-width: 700px;
+      margin: 30px auto;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: #005bb5;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    input, select {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      background: #005bb5;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #003f80;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background: #005bb5;
+      color: white;
+    }
+
+    .turno {
+      background: #e6f0ff;
+      border-left: 4px solid #005bb5;
+      padding: 10px;
+      margin-top: 20px;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📋 Control de Entrada - Oficina</h1>
+  </header>
+  <main>
+    <h2>Registro de Visitantes</h2>
+    <form id="registroForm">
+      <label>Nombre y Apellido:</label>
+      <input type="text" id="nombre" required placeholder="Ej: Juan Pérez" />
+
+      <label>Cédula (opcional):</label>
+      <input type="text" id="cedula" placeholder="Ej: 001-1234567-8" />
+
+      <label>Teléfono:</label>
+      <input type="tel" id="telefono" required placeholder="Ej: 809-555-5555" />
+
+      <label>Tipo de Servicio:</label>
+      <select id="servicio" required>
+        <option value="">Seleccione...</option>
+        <option value="Cedulación">Cedulación</option>
+        <option value="Actas">Servicios de Actas</option>
+        <option value="Transcripciones">Transcripciones</option>
+        <option value="Otro">Otro</option>
+      </select>
+
+      <button type="submit">Registrar Entrada</button>
+    </form>
+
+    <div id="turnoActual" class="turno" style="display:none;"></div>
+
+    <h2>Listado de Personas Registradas</h2>
+    <table id="tablaRegistros">
+      <thead>
+        <tr>
+          <th>Turno</th>
+          <th>Nombre</th>
+          <th>Servicio</th>
+          <th>Teléfono</th>
+          <th>Hora</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <script>
+    const form = document.getElementById('registroForm');
+    const tabla = document.getElementById('tablaRegistros').querySelector('tbody');
+    const turnoDiv = document.getElementById('turnoActual');
+    let turno = 0;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const nombre = document.getElementById('nombre').value.trim();
+      const telefono = document.getElementById('telefono').value.trim();
+      const servicio = document.getElementById('servicio').value;
+      const hora = new Date().toLocaleTimeString();
+
+      turno++;
+
+      const fila = document.createElement('tr');
+      fila.innerHTML = `
+        <td>${turno}</td>
+        <td>${nombre}</td>
+        <td>${servicio}</td>
+        <td>${telefono}</td>
+        <td>${hora}</td>
+      `;
+      tabla.appendChild(fila);
+
+      turnoDiv.textContent = `Turno actual: #${turno} - ${nombre} (${servicio})`;
+      turnoDiv.style.display = 'block';
+
+      form.reset();
+    });
+  </script>
+</body>
+</html>
